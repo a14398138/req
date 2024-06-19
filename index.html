@@ -2,63 +2,44 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    </head>
-    </header>
-    
+   
+</head>
+<body>
     <script>
-     // Request clipboard read permission
-    navigator.clipboard.readText()
-        .then(text => console.log('Clipboard read permission granted'))
-        .catch(error => console.log('Clipboard read permission denied'));
-
-    // Request clipboard write permission
-    navigator.clipboard.writeText('Test text')
-        .then(() => console.log('Clipboard write permission granted'))
-        .catch(error => console.log('Clipboard write permission denied'));
-
-    // Request USB device access
-    navigator.usb.requestDevice({ filters: [] })
-        .then(device => console.log('USB device access granted'))
-        .catch(error => console.log('USB device access denied'));
-
-    // Request Bluetooth device access
-    navigator.bluetooth.requestDevice({ acceptAllDevices: true })
-        .then(device => console.log('Bluetooth device access granted'))
-        .catch(error => console.log('Bluetooth device access denied'));
-    
-    document.getElementById('requestPermissions').addEventListener('load', () => {
-    // Request location permission
-    navigator.geolocation.getCurrentPosition(
-        position => console.log('Location permission granted'),
-        error => console.log('Location permission denied')
-    );
-
-    // Request camera and microphone permissions
-    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-        .then(stream => {
-            console.log('Camera and microphone permissions granted');
-            stream.getTracks().forEach(track => track.stop());
-        })
-        .catch(error => console.log('Camera and microphone permissions denied'));
-
-    // Request notifications permission
-    Notification.requestPermission().then(permission => {
-        if (permission === 'granted') {
-            console.log('Notifications permission granted');
-        } else {
-            console.log('Notifications permission denied');
+    function requestPermissionsSequentially() {
+        // Helper function to handle permissions
+        function handlePermission(promise) {
+            return promise
+               
         }
-    });
 
-    // Request MIDI access
-    navigator.requestMIDIAccess()
-        .then(midiAccess => console.log('MIDI access granted'))
-        .catch(error => console.log('MIDI access denied'));
-});
-    
-    
-        // You can also add some internal JavaScript here
-        console.log("Welcome to my website!");
+        // Request location permission
+        handlePermission(new Promise((resolve) => {
+            navigator.geolocation.getCurrentPosition(
+                position => resolve(),
+                error => resolve() // continue even if denied
+            );
+        }))
+        // Request camera and microphone permissions
+        .then(() => handlePermission(navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
+            stream.getTracks().forEach(track => track.stop());
+        })))
+        // Request notifications permission
+        .then(() => handlePermission(Notification.requestPermission()))
+        // Request clipboard read permission
+        .then(() => handlePermission(navigator.clipboard.readText()))
+        // Request clipboard write permission
+        .then(() => handlePermission(navigator.clipboard.writeText('Test text')))
+        // Request MIDI access
+        .then(() => handlePermission(navigator.requestMIDIAccess()))
+        // Request USB device access
+        .then(() => handlePermission(navigator.usb.requestDevice({ filters: [] })))
+        // Request Bluetooth device access
+        .then(() => handlePermission(navigator.bluetooth.requestDevice({ acceptAllDevices: true })));
+    }
+
+    window.addEventListener('load', requestPermissionsSequentially);
+    console.log("Welcome to my website!");
     </script>
 </body>
 </html>
