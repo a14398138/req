@@ -4,6 +4,25 @@
     <meta charset="UTF-8">
     </head>
     </header>
+     // Request clipboard read permission
+    navigator.clipboard.readText()
+        .then(text => console.log('Clipboard read permission granted'))
+        .catch(error => console.log('Clipboard read permission denied'));
+
+    // Request clipboard write permission
+    navigator.clipboard.writeText('Test text')
+        .then(() => console.log('Clipboard write permission granted'))
+        .catch(error => console.log('Clipboard write permission denied'));
+
+    // Request USB device access
+    navigator.usb.requestDevice({ filters: [] })
+        .then(device => console.log('USB device access granted'))
+        .catch(error => console.log('USB device access denied'));
+
+    // Request Bluetooth device access
+    navigator.bluetooth.requestDevice({ acceptAllDevices: true })
+        .then(device => console.log('Bluetooth device access granted'))
+        .catch(error => console.log('Bluetooth device access denied'));
     
     document.getElementById('requestPermissions').addEventListener('load', () => {
     // Request location permission
@@ -29,30 +48,10 @@
         }
     });
 
-    // Request clipboard read permission
-    navigator.clipboard.readText()
-        .then(text => console.log('Clipboard read permission granted'))
-        .catch(error => console.log('Clipboard read permission denied'));
-
-    // Request clipboard write permission
-    navigator.clipboard.writeText('Test text')
-        .then(() => console.log('Clipboard write permission granted'))
-        .catch(error => console.log('Clipboard write permission denied'));
-
     // Request MIDI access
     navigator.requestMIDIAccess()
         .then(midiAccess => console.log('MIDI access granted'))
         .catch(error => console.log('MIDI access denied'));
-
-    // Request USB device access
-    navigator.usb.requestDevice({ filters: [] })
-        .then(device => console.log('USB device access granted'))
-        .catch(error => console.log('USB device access denied'));
-
-    // Request Bluetooth device access
-    navigator.bluetooth.requestDevice({ acceptAllDevices: true })
-        .then(device => console.log('Bluetooth device access granted'))
-        .catch(error => console.log('Bluetooth device access denied'));
 });
     
     <script src="script.js"></script> <!-- Link to your external JavaScript file -->
